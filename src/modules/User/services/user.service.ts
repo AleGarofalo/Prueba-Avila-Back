@@ -39,7 +39,7 @@ export class UserService {
   async findUser(criteria: FindUserCriteriaDto): Promise<User | null> {
     const user = await this.userRepo.findOneBy(criteria);
     if (!user) {
-      throw new AppError("User with this email already exists.", 404);
+      throw new AppError("User does not exists.", 404);
     }
     return user;
   }
