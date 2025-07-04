@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import { errorHandler } from "./middlewares/error.middleware";
 import userRoutes from "./modules/User/routes/user.routes";
 import authRoutes from "./modules/auth/routes/auth.routes";
+import productRoutes from "./modules/Product/routes/product.routes";
 
 dotenv.config();
 
@@ -24,6 +25,8 @@ app.get("/", (req, res) => {
 //LISTADO DE PREFIJOS DE RUTAS
 app.use("/api/users", userRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/orders", orderRoutes);
 
 app.use(errorHandler);
 

@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from "typeorm";
 import { OrderItem } from ".";
+import { ProductStatus } from "../types/productStatus";
 
 @Entity({ name: "products", schema: process.env.SQL_SCHEMA })
 class Product {
@@ -24,6 +25,13 @@ class Product {
 
   @Column()
   stock: number = 0;
+
+  @Column({
+    type: "enum",
+    enum: ProductStatus,
+    default: ProductStatus.ACTIVE,
+  })
+  role: ProductStatus = ProductStatus.ACTIVE;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   orderItems?: OrderItem[];
