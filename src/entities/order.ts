@@ -13,7 +13,7 @@ import { OrderItem, User } from ".";
 @Entity({ name: "orders", schema: process.env.SQL_SCHEMA })
 class Order {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number = 0;
 
   @ManyToOne(() => User, (user: User) => user.orders, { eager: true })
   user?: User;
@@ -28,13 +28,13 @@ class Order {
     enum: OrderStatus,
     default: OrderStatus.PENDING,
   })
-  status?: OrderStatus;
+  status?: OrderStatus = OrderStatus.PENDING;
 
   @CreateDateColumn({ name: "created_at", type: "timestamp" })
-  createdAt?: Date;
+  createdAt: Date = new Date(); // momento en que se crea el registro
 
   @UpdateDateColumn({ name: "updated_at", type: "timestamp" })
-  updatedAt?: Date;
+  updatedAt!: Date; // ← sin valor por defecto
 }
 
 export { Order };

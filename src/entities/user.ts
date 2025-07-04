@@ -7,37 +7,37 @@ import {
   OneToMany,
 } from "typeorm";
 import { UserRole } from "../types/userRole";
-import { Order } from ".";
+import { Order } from "./order";
 
-@Entity({ name: "users", schema: process.env.SQL_SCHEMA }) // Evita conflicto con palabra reservada
+@Entity({ name: "users", schema: process.env.SQL_SCHEMA })
 class User {
   @PrimaryGeneratedColumn()
-  id?: number;
+  id: number = 0;
 
   @Column({ unique: false })
-  name?: string;
+  name: string = "";
 
   @Column({ unique: true })
-  email?: string;
+  email: string = "";
 
   @Column()
-  password?: string;
+  password: string = "";
 
   @Column({
     type: "enum",
     enum: UserRole,
     default: UserRole.USER,
   })
-  role?: UserRole;
+  role: UserRole = UserRole.USER;
 
   @OneToMany(() => Order, (order) => order.user)
-  orders?: Order[];
+  orders: Order[] = [];
 
   @CreateDateColumn({ name: "created_at", type: "timestamp" })
-  createdAt?: Date;
+  createdAt: Date = new Date(); // momento en que se crea el registro
 
   @UpdateDateColumn({ name: "updated_at", type: "timestamp" })
-  updatedAt?: Date;
+  updatedAt!: Date; // ← sin valor por defecto
 }
 
 export { User };
