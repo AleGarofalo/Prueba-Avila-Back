@@ -20,6 +20,10 @@ export class UserService {
       throw new AppError("User with this email already exists.", 409);
     }
 
+    if (dto.password != dto.confirmPassword) {
+      throw new AppError("Passwords do not match.", 400);
+    }
+
     const hashedPassword = await bcrypt.hash(dto.password, 10);
     const user = this.userRepo.create({
       name: dto.name,

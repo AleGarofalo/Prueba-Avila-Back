@@ -3,6 +3,8 @@ import cors from "cors";
 import morgan from "morgan";
 import dotenv from "dotenv";
 import { errorHandler } from "./middlewares/error.middleware";
+import userRoutes from "./modules/User/routes/user.routes";
+import authRoutes from "./modules/auth/routes/auth.routes";
 
 dotenv.config();
 
@@ -19,8 +21,9 @@ app.get("/", (req, res) => {
   res.send("📦 AvilaTek API is running.");
 });
 
-// Aquí podrías montar tus rutas, por ejemplo:
-// app.use("/api/users", userRoutes);
+//LISTADO DE PREFIJOS DE RUTAS
+app.use("/api/users", userRoutes);
+app.use("/api/auth", authRoutes);
 
 app.use(errorHandler);
 
