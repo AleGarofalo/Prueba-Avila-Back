@@ -31,7 +31,7 @@ class User {
   role: UserRole = UserRole.USER;
 
   @OneToMany(() => Order, (order) => order.user)
-  orders: Order[] = [];
+  orders?: Order[];
 
   @CreateDateColumn({ name: "created_at", type: "timestamp" })
   createdAt: Date = new Date(); // momento en que se crea el registro

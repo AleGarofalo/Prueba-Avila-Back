@@ -31,7 +31,7 @@ class Product {
     enum: ProductStatus,
     default: ProductStatus.ACTIVE,
   })
-  role: ProductStatus = ProductStatus.ACTIVE;
+  status: ProductStatus = ProductStatus.ACTIVE;
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.product)
   orderItems?: OrderItem[];
