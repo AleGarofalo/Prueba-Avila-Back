@@ -14,6 +14,7 @@ export class AuthController {
     try {
       const token = await this.authService.login(req.body);
       logger.info(`🔐 Login successful for ${req.body.email}`);
+      console.log("El token", token);
       res.status(200).json({ token });
     } catch (error) {
       next(error);

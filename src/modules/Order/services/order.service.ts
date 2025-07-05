@@ -22,6 +22,7 @@ export class OrderService {
   }
 
   // Crear una orden con múltiples items
+  // Crear una orden con múltiples items
   async createOrder(dto: CreateOrderDto): Promise<Order> {
     const user = await this.userRepo.findOneBy({ id: dto.userId });
     if (!user) {
@@ -32,11 +33,16 @@ export class OrderService {
       throw new AppError("Order must include at least one product", 400);
     }
 
+    // Crear orden sin items aún
     const order = this.orderRepo.create({
       user,
       status: OrderStatus.PENDING,
-      items: [],
     });
+
+    // Guardar primero la orden para que tenga ID
+    await this.orderRepo.save(order);
+
+    const orderItems: OrderItem[] = [];
 
     for (const item of dto.items) {
       const product = await this.productRepo.findOneBy({ id: item.productId });
@@ -52,25 +58,27 @@ export class OrderService {
         );
       }
 
-      // Descontar stock
+      // Descontar stock y guardar producto
       product.stock -= item.quantity;
       await this.productRepo.save(product);
 
-      // Crear el OrderItem
+      // Crear OrderItem con referencia a la orden ya creada
       const orderItem = this.orderItemRepo.create({
         product,
         quantity: item.quantity,
         priceAtPurchase: product.price,
-        order, // Relación inversa
+        order, // ya tiene ID
       });
 
-      if (!order.items) {
-        order.items = [];
-      }
-      order.items.push(orderItem);
+      orderItems.push(orderItem);
     }
 
-    return this.orderRepo.save(order);
+    // Guardar todos los items
+    await this.orderItemRepo.save(orderItems);
+
+    // Asociar los items a la orden y devolver orden con relaciones
+    order.items = orderItems;
+    return this.orderRepo.save(order); // Devuelve con los items listos
   }
 
   // Obtener todas las órdenes (solo para admin)

@@ -6,6 +6,7 @@ import { errorHandler } from "./middlewares/error.middleware";
 import userRoutes from "./modules/User/routes/user.routes";
 import authRoutes from "./modules/auth/routes/auth.routes";
 import productRoutes from "./modules/Product/routes/product.routes";
+import orderRoutes from "./modules/Order/routes/order.routes";
 
 dotenv.config();
 

@@ -18,10 +18,10 @@ class OrderItem {
 
   @ManyToOne(() => Product, { eager: true })
   @JoinColumn({ name: "product_id" })
-  product?: Product;
+  product: Product = new Product();
 
   @Column()
-  quantity?: number;
+  quantity: number = 0;
 
   @Column("decimal", { name: "price_at_purchase", scale: 2, precision: 10 })
   priceAtPurchase?: number;

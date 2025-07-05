@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { OrderService } from "./services/order.service";
 import { CreateOrderDto } from "./DTO/createOrderDTO";
+import { OrderResponseDto } from "./DTO/orderResponseDTO";
 import logger from "../../utils/logger";
 import { AppError } from "../../middlewares/error.middleware";
 
@@ -17,7 +18,7 @@ export class OrderController {
       const dto: CreateOrderDto = req.body;
       const order = await this.orderService.createOrder(dto);
       logger.info(`Order created with ID: ${order.id}`);
-      res.status(201).json(order);
+      res.status(201).json(new OrderResponseDto(order));
     } catch (err) {
       next(err);
     }
@@ -27,8 +28,9 @@ export class OrderController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const orders = await this.orderService.getAllOrders();
+      const result = orders.map((order) => new OrderResponseDto(order));
       logger.info(`Retrieved ${orders.length} orders`);
-      res.json(orders);
+      res.json(result);
     } catch (err) {
       next(err);
     }
@@ -45,7 +47,7 @@ export class OrderController {
       }
 
       logger.info(`Order retrieved: ID ${id}`);
-      res.json(order);
+      res.json(new OrderResponseDto(order));
     } catch (err) {
       next(err);
     }

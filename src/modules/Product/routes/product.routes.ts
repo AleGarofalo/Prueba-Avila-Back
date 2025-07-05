@@ -19,7 +19,7 @@ router.get("/:id", authenticateToken, (req, res, next) =>
 
 // ✅ Crear un producto (admin)
 router.post(
-  "/",
+  "/register",
   authenticateToken,
   authorizeRole(UserRole.ADMIN),
   (req, res, next) => controller.create(req, res, next)

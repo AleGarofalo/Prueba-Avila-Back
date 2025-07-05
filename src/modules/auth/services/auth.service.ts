@@ -8,11 +8,11 @@ import { AppError } from "../../../middlewares/error.middleware";
 export class AuthService {
   async login(dto: loginDto): Promise<string> {
     const userRepo = AppDataSource.getRepository(User);
-
+    console.log("El email del user", dto.email);
     const user = await userRepo.findOneBy({ email: dto.email });
 
     if (!user) {
-      throw new AppError("Invalid credentials", 401);
+      throw new AppError("User not found", 401);
     }
 
     const isPasswordValid = await bcrypt.compare(dto.password, user.password);

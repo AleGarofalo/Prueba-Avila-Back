@@ -16,7 +16,7 @@ class Order {
   id: number = 0;
 
   @ManyToOne(() => User, (user: User) => user.orders, { eager: true })
-  user?: User;
+  user: User = new User();
 
   @OneToMany(() => OrderItem, (orderItem) => orderItem.order, {
     cascade: true,
@@ -28,7 +28,7 @@ class Order {
     enum: OrderStatus,
     default: OrderStatus.PENDING,
   })
-  status?: OrderStatus = OrderStatus.PENDING;
+  status: OrderStatus = OrderStatus.PENDING;
 
   @CreateDateColumn({ name: "created_at", type: "timestamp" })
   createdAt: Date = new Date(); // momento en que se crea el registro
