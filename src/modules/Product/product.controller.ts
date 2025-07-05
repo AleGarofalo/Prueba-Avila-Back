@@ -3,6 +3,7 @@ import { ProductService } from "./services/product.service";
 import { CreateProductDto } from "./DTO/createProductDTO";
 import { UpdateProductDto } from "./DTO/updateProductDTO";
 import { FindProductCriteriaDto } from "./DTO/findProductCriteriaDTO";
+import { ProductResponseDto } from "./DTO/productResponseDTO";
 import logger from "../../utils/logger";
 import { AppError } from "../../middlewares/error.middleware";
 
@@ -19,7 +20,7 @@ export class ProductController {
       const dto: CreateProductDto = req.body;
       const product = await this.productService.createProduct(dto);
       logger.info(`Product created: ${product.name}`);
-      res.status(201).json(product);
+      res.status(201).json(new ProductResponseDto(product));
     } catch (err) {
       next(err);
     }
@@ -29,8 +30,9 @@ export class ProductController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
       const products = await this.productService.getAllProducts();
+      const result = products.map((p) => new ProductResponseDto(p));
       logger.info(`Retrieved ${products.length} products`);
-      res.json(products);
+      res.json(result);
     } catch (err) {
       next(err);
     }
@@ -49,7 +51,7 @@ export class ProductController {
       }
 
       logger.info(`Product retrieved: ID ${product.id}`);
-      res.json(product);
+      res.json(new ProductResponseDto(product));
     } catch (err) {
       next(err);
     }
@@ -63,7 +65,7 @@ export class ProductController {
 
       const updatedProduct = await this.productService.UpdateProduct(id, dto);
       logger.info(`Product updated: ID ${id}`);
-      res.json(updatedProduct);
+      res.json(new ProductResponseDto(updatedProduct));
     } catch (err) {
       next(err);
     }
